@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+    depends_on:
+      - django
+    links:
+      - "django:django-app.net"
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_PORT=80
+    restart: always
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: ./Dockerfile
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_PASSWORD: "postgres"
+    restart: always
+  django:
+    build:
+      context: ./django
+      dockerfile: ./Dockerfile
+    command: bash -c "pip install -r requirements.txt && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+       - ../app:/code
+    depends_on:
+      - postgres
+    links:
+      - "postgres:postgres.net"
+    environment:
+      - FRONTEND_URL=http://localhost:4242
+      - DEBUG=True
