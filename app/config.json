@@ -1,0 +1,8 @@
+{
+  "NAME": "test",
+  "USER": "postgres",
+  "PASSWORD": "postgres",
+  "HOST": "localhost",
+  "PORT": "5433",
+  "FRONTEND_URL": "http://localhost:4242"
+}
